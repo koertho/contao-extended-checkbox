@@ -142,7 +142,7 @@ class FormCheckBoxExtended extends Widget
             $this->varValue = '';
         }
     }
-    
+
     protected function generateCheckboxLabel(): string
     {
         $evp_link_target = '';
@@ -190,14 +190,15 @@ class FormCheckBoxExtended extends Widget
             $this->arrAttributes['required'] = 'required';
         }
 
-        $this->arrAttributes['checked'] = ($this->varValue == $this->checkbox_extended_value);
+        if ($this->varValue == $this->checkbox_extended_value) {
+            $this->arrAttributes['checked'] = 'checked';
+        }
 
         $this->checkboxLabel = $this->generateCheckboxLabel();
 
         return parent::parse($arrAttributes);
     }
-
-
+    
     /**
      * Generate the widget and return it as string.
      */
