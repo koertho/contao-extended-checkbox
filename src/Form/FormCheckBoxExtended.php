@@ -152,6 +152,14 @@ class FormCheckBoxExtended extends Widget
             $evp_link_target = 'target="_blank"';
         }
 
+        if (!str_contains($this->checkbox_extended_embed, '%s')) {
+            return sprintf('%s%s%s',
+                $this->mandatory ? '<span class="invisible">'.$GLOBALS['TL_LANG']['MSC']['mandatory'].' </span>' : '',
+                $this->checkbox_extended_embed,
+                $this->mandatory ? '<span class="mandatory">*</span>' : ''
+            );
+        }
+
         // Embeded link
         $evp_link_embed = explode('%s', $this->checkbox_extended_embed);
 
