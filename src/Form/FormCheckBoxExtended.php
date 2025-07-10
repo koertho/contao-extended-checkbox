@@ -171,7 +171,7 @@ class FormCheckBoxExtended extends Widget
 
         return sprintf(
             $this->checkbox_extended_embed,
-            $this->checkbox_extended_title
+            $title
         );
     }
 
