@@ -23,7 +23,15 @@
             <span>
                 <input type="checkbox" name="<?= $this->name ?>" id="opt_<?= $this->id ?>_0" class="checkbox"
                        value="<?= $this->checkbox_extended_value ?>"<?= $this->getAttributes() ?> />
-                <label id="lbl_<?= $this->id ?>_0" for="opt_<?= $this->id ?>_0"><?= $this->checkboxLabel ?></label>
+                <label id="lbl_<?= $this->id ?>_0" for="opt_<?= $this->id ?>_0">
+                    <?php if ($this->mandatory): ?>
+                        <span class="invisible"><?= $this->mandatoryField ?> </span>
+                    <?php endif; ?>
+                    <?= $this->checkboxLabelText ?>
+                    <?php if ($this->mandatory): ?>
+                        <span class="mandatory">*</span>
+                    <?php endif; ?>
+                </label>
             </span>
     </div>
 </fieldset>

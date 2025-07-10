@@ -143,7 +143,7 @@ class FormCheckBoxExtended extends Widget
         }
     }
 
-    protected function generateCheckboxLabel(): string
+    protected function buildCheckboxLabel(): string
     {
         $evp_link_target = '';
 
@@ -152,44 +152,39 @@ class FormCheckBoxExtended extends Widget
             $evp_link_target = 'target="_blank"';
         }
 
-        if (!str_contains($this->checkbox_extended_embed, '%s')) {
-            return sprintf('%s%s%s',
-                $this->mandatory ? '<span class="invisible">'.$GLOBALS['TL_LANG']['MSC']['mandatory'].' </span>' : '',
-                $this->checkbox_extended_embed,
-                $this->mandatory ? '<span class="mandatory">*</span>' : ''
-            );
-        }
+        $title = $this->checkbox_extended_title;
 
-        // Embeded link
-        $evp_link_embed = explode('%s', $this->checkbox_extended_embed);
-
-        // Set href
-        if (empty($this->checkbox_extended_url)) {
+        if ($this->checkbox_extended_url) {
+            $href = $this->checkbox_extended_url;
+        } elseif ($this->checkbox_extended_singleSRC) {
             $href = $this->buildDownload($this->checkbox_extended_singleSRC);
         } else {
-            $href = $this->checkbox_extended_url;
+            $href = '';
         }
 
-        if (empty($this->checkbox_extended_url) && empty($this->checkbox_extended_singleSRC)) {
-            return sprintf('%s%s%s%s%s',
-                $this->mandatory ? '<span class="invisible">'.$GLOBALS['TL_LANG']['MSC']['mandatory'].' </span>' : '',
-                $evp_link_embed[0],
-                $this->checkbox_extended_title,
-                $evp_link_embed[1],
-                $this->mandatory ? '<span class="mandatory">*</span>' : ''
-            );
-        } else {
-            return sprintf('%s%s<a href="%s" title="%s"%s>%s</a>%s%s',
-                $this->mandatory ? '<span class="invisible">'.$GLOBALS['TL_LANG']['MSC']['mandatory'].' </span>' : '',
-                $evp_link_embed[0],
-                $href,
-                $this->checkbox_extended_title,
-                $evp_link_target,
-                $this->checkbox_extended_title,
-                $evp_link_embed[1],
-                $this->mandatory ? '<span class="mandatory">*</span>' : ''
+        if (!empty($href)) {
+            $title = sprintf(
+                '<a href="%s" title="%s"%s>%s</a>',
+                $href, $title, $evp_link_target, $title
             );
         }
+
+        return sprintf(
+            $this->checkbox_extended_embed,
+            $this->checkbox_extended_title
+        );
+    }
+
+    protected function generateCheckboxLabel(): string
+    {
+        $label = $this->buildCheckboxLabel();
+
+        return sprintf(
+            '%s%s%s',
+            $this->mandatory ? '<span class="invisible">' . $GLOBALS['TL_LANG']['MSC']['mandatory'] . ' </span>' : '',
+            $label,
+            $this->mandatory ? '<span class="mandatory">*</span>' : ''
+        );
     }
 
     public function parse($arrAttributes = null)
@@ -203,6 +198,7 @@ class FormCheckBoxExtended extends Widget
         }
 
         $this->checkboxLabel = $this->generateCheckboxLabel();
+        $this->checkboxLabelText = $this->buildCheckboxLabel();
 
         return parent::parse($arrAttributes);
     }
